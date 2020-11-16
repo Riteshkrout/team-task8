@@ -1,0 +1,40 @@
+def LVMMenu():
+    while(1):
+        print()
+        print()
+        print("Welcome to LVM Configuration")
+        print("\t\t\t press 1: Check Disk Information")
+        print("\t\t\t press 2: Create a Physical Volume")
+        print("\t\t\t press 3: Create a Volume Group")
+        print("\t\t\t press 4: Create, Format, Mount LVM")
+        print("\t\t\t press 5: Extend LVM")
+        print("\t\t\t press 6: Exit")
+        print()
+        option = input("Select an option: ")
+        if(option == "1"):
+            os.system("fdisk -l")
+        elif(option == "2"):
+            disk_name = input("Please spcify the disk name: ")
+            os.system(f"pvcreate {disk_name}")
+        elif(option == "3"):
+            vgname = input("Name of the Volume Group: ")
+            disks = input("Please specify all the DiskNames ( with spaces ): ")
+            os.system(f"vgcreate {vgname} {disks}")
+        elif(option == "4"):
+            vgname = input("Name of the Volume Group: ")
+            lvmname = input("Name of the LVM: ")
+            size = input("Enter the size: ")
+            mount_point = input("Specify the Mount Point: ")
+            os.system(f"lvcreate --size {size} --name {lvmname} {vgname}")
+            os.system(f"mkfs.ext4 /dev/{vgname}/{lvmname}")
+            os.system(f"mount /dev/{vgname}/{lvmname} {mount_point}")
+        elif(option == "5"):
+            vgname = input("Specify the name of the Volume Group: ")
+            lvmname = input("Specify the name of the LVM: ")
+            size = input("Size to be increased: ")
+            os.system(f"lvextend --size +{size} /dev/{vgname}/{lvmname}")
+            os.system(f"resize2fs /dev/{vgname}/{lvmname}")
+        elif(option == "6"):
+            print("Exiting LVM Menu  .......Please Wait..............")
+            os.system('sleep 2')
+            break
